@@ -19,8 +19,7 @@ jobs:
         with:
           path: ~/.npm #${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
-          restore-key: |
-            ${{ runner.os }}-nodecachekey-
+          restore-keys: ${{ runner.os }}-nodecachekey-
       - run: npm ci
       - run: npm run format:check
       - run: npm run test -- --coverage
