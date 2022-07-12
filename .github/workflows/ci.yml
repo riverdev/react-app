@@ -17,7 +17,7 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v1
         with:
-          path: ~/.npm   #${{ steps.npm-cache-dir.outputs.dir }}
+          path: ~/.npm #${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
           restore-key: |
             ${{ runner.os }}-nodecachekey-
