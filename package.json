@@ -20,6 +20,11 @@
     "format:check": "prettier --check \"**/*.{js,jsx,yml,yaml,json,css,scss,mdl}\"",
     "format": "prettier --write \"**/*.{js,jsx,yml,yaml,json,css,scss,mdl}\""
   },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -39,7 +44,13 @@
     ]
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "prettier": "2.7.1",
     "semantic-release": "^19.0.3"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
