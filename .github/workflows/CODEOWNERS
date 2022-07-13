@@ -1,1 +1,4 @@
 * @riverdev
+*.js @riverdev
+*.yml @mason2060
+/public @riverdev
