@@ -71,7 +71,7 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
           #SLACK_MESSAGE: New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>
-          SLACK_MESSAGE: ${{ github.event.release.tag_name }} is published
+          SLACK_MESSAGE: ${{ github.event.release.tag_name }}
           #SLACK_CHANNEL: "z_general"
 
       #    - name: Open an Issue
@@ -97,6 +97,7 @@ jobs:
         id: date
         run: |
           echo "::set-output name=today::$(date "+%Y/%m/%d")"
+          echo ${{ github.event.release.tag_name }}
 
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
