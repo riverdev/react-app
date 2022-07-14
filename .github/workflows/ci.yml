@@ -57,7 +57,7 @@ jobs:
         id: color
 
       - name: Concat color env with string
-        run: echo '::set-output name=CONCAT_COLOR::${{ steps.color.outputs.SELECTED_COLOR }} colors'
+        run: echo '::set-output name=CONCAT_COLOR::${{ steps.color.outputs.SELECTED_COLOR }} ${{github.sha}}'
         id: concat
 
       #${{github.event.pull_request.user.login}}
