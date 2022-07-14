@@ -93,11 +93,16 @@ jobs:
       #        "assignees": ["${{
       #        github.event.pull_request.user.login }}"]
 
+      - name: Get today's date
+        id: date
+        run: |
+          echo "::set-output name=today::$(date "+%Y/%m/%d")"
+
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: 'Hello' #${{ steps.date.outputs.today }}
+          title: ${{ steps.date.outputs.today }}
           body: |
             ## This week's TODO
 
