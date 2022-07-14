@@ -44,21 +44,26 @@ jobs:
         run: |
           zip -r build.zip ./build
           zip -r coverage.zip ./coverage
+
       - name: Create a Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set selected color
+        run: echo '::set-output name=SELECTED_COLOR::green'
+        id: color
+
       - name: Send a Slack Message
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker://technosophos/slack-notify
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
           #SLACK_MESSAGE: New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>
-          SLACK_MESSAGE: ${{ github.event.release.tag_name }} Hello
+          SLACK_MESSAGE: ${{ steps.color.outputs.SELECTED_COLOR }} Hello
           #SLACK_CHANNEL: "z_general"
 
       #    - name: Open an Issue
@@ -98,7 +103,6 @@ jobs:
         id: date
         run: |
           echo "::set-output name=today::$(date "+%Y/%m/%d")"
-          echo
 
       - name: Create an issue
         uses: actions-ecosystem/action-create-issue@v1
