@@ -61,12 +61,12 @@ jobs:
         run: npx surge --project ./build --domain production-reactapp.surge.sh
         env:
           SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
-          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}          
-          
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
       - name: Send a Slack Message
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker://technosophos/slack-notify
         env:
           SLACK_WEBHOOK: $$ {{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
-          SLACK_MESSAGE: "Deployed to Production"
+          SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_CHANNEL: "z_general"
