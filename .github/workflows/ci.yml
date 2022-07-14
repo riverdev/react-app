@@ -71,7 +71,7 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
           #SLACK_MESSAGE: New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>
-          SLACK_MESSAGE: ${{ github.event.release.tag_name }}
+          SLACK_MESSAGE: ${{ github.event.release.tag_name }} Hello
           #SLACK_CHANNEL: "z_general"
 
       #    - name: Open an Issue
