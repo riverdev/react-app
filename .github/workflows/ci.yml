@@ -57,7 +57,8 @@ jobs:
         id: color
 
       - name: Concat color env with string
-        run: echo '::set-output name=CONCAT_COLOR::${{ steps.color.outputs.SELECTED_COLOR }} ${{github.sha}}'
+        #run: echo '::set-output name=CONCAT_COLOR::${{ steps.color.outputs.SELECTED_COLOR }} ${{github.sha}}'
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
         id: concat
 
       #${{github.event.pull_request.user.login}}
@@ -70,7 +71,7 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
 
-          SLACK_MESSAGE: ${{ steps.concat.outputs.CONCAT_COLOR }} Hello
+          SLACK_MESSAGE: ${{ steps.concat.outputs.tag }} Hello
           #SLACK_CHANNEL: "z_general"
 
       - name: Deploy to Staging
