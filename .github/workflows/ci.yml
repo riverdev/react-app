@@ -64,7 +64,7 @@ jobs:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
 
       - name: Send a Slack Message
-      #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker://technosophos/slack-notify
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
@@ -84,12 +84,11 @@ jobs:
           secrets.GITHUB_TOKEN }}' \
           --header 'content-type: application/json' \
           --data '{
-          "title": "Automated issue for commit: ${{
-          github.sha}}",
-          "body": "This issue was automatically created by
-          the GitHub Action workflow **${{ github.workflow
-          }}**. \n\n The commit hash was: _${{ github.sha}
-          }_.",
-          "assignees": ["${{
-          github.event.pull_request.user.login }}"]
+          "title": "Automated issue for commit",
           }'
+  #           "body": "This issue was automatically created by
+  #         "title": "Automated issue for commit: ${{ github.sha }}",
+  #        the GitHub Action workflow **${{ github.workflow
+  #        }}**. \n\n The commit hash was: _${{ github.sha }}_.",
+  #        "assignees": ["${{
+  #        github.event.pull_request.user.login }}"]
