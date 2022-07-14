@@ -69,7 +69,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
           #SLACK_MESSAGE: 'Deployed to Production'
-          SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
-          #SLACK_MESSAGE: '{"text":"New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>"}'
+          #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
+          SLACK_MESSAGE: '{"text":"New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>"}'
 
           #SLACK_CHANNEL: "z_general"
