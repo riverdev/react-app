@@ -25,6 +25,14 @@ jobs:
       - run: npm run test -- --coverage
         env:
           CI: true
+
+      - name: Dump env
+        run: env | sort
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
       - name: Upload Test Coverage
         uses: actions/upload-artifact@v1
         with:
