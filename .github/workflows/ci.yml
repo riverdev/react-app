@@ -52,8 +52,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set selected color
+        #run: echo '::set-output name=SELECTED_COLOR::green'
         run: echo '::set-output name=SELECTED_COLOR::green'
         id: color
+
+      - name: Concat color env with string
+        run: echo '::set-output name=CONCAT_COLOR::${{ steps.color.outputs.SELECTED_COLOR }} colors'
+        id: concat
+
+      #${{github.event.pull_request.user.login}}
 
       - name: Send a Slack Message
         #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -62,28 +69,9 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
-          #SLACK_MESSAGE: New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>
-          SLACK_MESSAGE: ${{ steps.color.outputs.SELECTED_COLOR }} Hello
-          #SLACK_CHANNEL: "z_general"
 
-      #    - name: Open an Issue
-      #      # if
-      #      run: |
-      #        curl --request POST \
-      #        --url https://api.github.com/repos/${{
-      #        github.repository }}/issues \
-      #        --header 'authorization: Bearer ${{
-      #        secrets.GITHUB_TOKEN }}' \
-      #        --header 'content-type: application/json' \
-      #        --data '{
-      #        "title": "Automated issue for commit",
-      #        }'
-      #           "body": "This issue was automatically created by
-      #         "title": "Automated issue for commit: ${{ github.sha }}",
-      #        the GitHub Action workflow **${{ github.workflow
-      #        }}**. \n\n The commit hash was: _${{ github.sha }}_.",
-      #        "assignees": ["${{
-      #        github.event.pull_request.user.login }}"]
+          SLACK_MESSAGE: ${{ steps.concat.outputs.CONCAT_COLOR }} Hello
+          #SLACK_CHANNEL: "z_general"
 
       - name: Deploy to Staging
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
@@ -114,7 +102,26 @@ jobs:
 
             - [ ] Have a meeting with UX team
             - [ ] Check the dashboard
-
           labels: |
             meeting
             weekly
+
+      # Another option for creating an issue using curl to API, didnt work when I tried, formatting error
+      #    - name: Open an Issue
+      #      # if
+      #      run: |
+      #        curl --request POST \
+      #        --url https://api.github.com/repos/${{
+      #        github.repository }}/issues \
+      #        --header 'authorization: Bearer ${{
+      #        secrets.GITHUB_TOKEN }}' \
+      #        --header 'content-type: application/json' \
+      #        --data '{
+      #        "title": "Automated issue for commit",
+      #        }'
+      #           "body": "This issue was automatically created by
+      #         "title": "Automated issue for commit: ${{ github.sha }}",
+      #        the GitHub Action workflow **${{ github.workflow
+      #        }}**. \n\n The commit hash was: _${{ github.sha }}_.",
+      #        "assignees": ["${{
+      #        github.event.pull_request.user.login }}"]
