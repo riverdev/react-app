@@ -55,6 +55,28 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Use NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - name: Cache dependencies node_modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm #${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-nodecachekey-
+
+      - run: npm ci
+
+      - run: npm run format:check
+
+      - run: npm run test -- --coverage
+        env:
+          CI: true
+
       - name: Build Project
         #if: github.event_name == 'push'
         run: npm run build
