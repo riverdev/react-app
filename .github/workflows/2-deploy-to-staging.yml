@@ -1,4 +1,4 @@
-name: Staging
+name: Deploy To Staging
 on:
   push:
     branches: [develop]
