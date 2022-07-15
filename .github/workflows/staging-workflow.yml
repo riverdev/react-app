@@ -1,0 +1,85 @@
+name: Staging
+on:
+  pull_request:
+    branches: [develop]
+  push:
+    branches: [develop]
+
+jobs:
+  auto-testing:
+    name: Test and Check Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - name: Cache dependencies node_modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm #${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-nodecachekey-
+
+      - run: npm ci
+
+      - run: npm run format:check
+
+      - run: npm run test -- --coverage
+        env:
+          CI: true
+
+      - name: Upload Test Coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
+
+      - name: Send a Slack Message
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+        uses: docker://technosophos/slack-notify
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
+          #SLACK_MESSAGE: 'Deployed to Production'
+          #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
+
+          SLACK_MESSAGE: Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
+          #SLACK_CHANNEL: "z_general"
+
+  deploy_to_staging:
+    name: Deploy Approved Request To Staging
+    needs: auto-testing
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Project
+        #if: github.event_name == 'push'
+        run: npm run build
+
+      - name: Upload Build Folder Artifact
+        #if: github.event_name == 'push'
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+
+      - name: Deploy to Staging
+        #if: github.event_name == 'push' # This branch will always be develop because of header "on" values //////  && github.ref == 'refs/heads/develop'
+        run: npx surge --project ./build --domain dashing-scale.surge.sh
+        env:
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
+      - name: Send a Slack Message
+        #if: github.event_name == 'push' # This branch will always be develop because of header "on" values //////  && github.ref == 'refs/heads/develop'
+        uses: docker://technosophos/slack-notify
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
+          #SLACK_MESSAGE: 'Deployed to Production'
+          #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
+
+          SLACK_MESSAGE: Deployed to staging
+          #SLACK_CHANNEL: "z_general"
