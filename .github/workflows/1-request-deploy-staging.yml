@@ -8,6 +8,11 @@ jobs:
     name: Test Request For Staging
     runs-on: ubuntu-latest
     steps:
+      - name: Get today's date
+        id: getdate
+        run: |
+          echo "::set-output name=today::$(date "+%Y/%m/%d")"
+
       - uses: actions/checkout@v2
 
       - name: Use NodeJS
@@ -43,5 +48,19 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
 
-          SLACK_MESSAGE: Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
+          SLACK_MESSAGE: ${{ steps.getdate.outputs.today }} " :" Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
           #SLACK_CHANNEL: "z_general"
+
+      - name: Create an issue
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: ${{ steps.getdate.outputs.today }} Merge to develop
+          body: |
+            ## Waiting for workflow to develop branch merge approval
+
+            - [ ] Go over test results & comments
+            - [ ] Approve (or Reject) the merge
+          labels: |
+            merge
+            staging
