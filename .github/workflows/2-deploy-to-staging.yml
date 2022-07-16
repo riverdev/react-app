@@ -9,6 +9,11 @@ jobs:
     #if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
+      - name: Get today's date
+        id: getdate
+        run: |
+          echo "::set-output name=today::$(date "+%Y/%m/%d")"
+
       - uses: actions/checkout@v2
 
       - name: Use NodeJS
@@ -65,3 +70,17 @@ jobs:
 
           SLACK_MESSAGE: Deployed to staging
           #SLACK_CHANNEL: "z_general"
+
+      - name: Create an issue
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: ${{ steps.getdate.outputs.today }} Deploy to develop
+          body: |
+            ## Deployed to Staging Server
+
+            - [ ] Go to the url and check the website
+            - [ ] Notify in slck when you finish
+          labels: |
+            deploy
+            staging
