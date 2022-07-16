@@ -72,15 +72,16 @@ jobs:
           #SLACK_CHANNEL: "z_general"
 
       - name: Create an issue
+        if: failure() && github.event_name == 'push'
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: ${{ steps.getdate.outputs.today }} Deploy to develop
+          title: ${{ steps.getdate.outputs.today }} Failed wokflow deploying to staging server
           body: |
             ## Deployed to Staging Server
 
-            - [ ] Go to the url and check the website
-            - [ ] Notify in slck when you finish
+            - [ ] Find the errors
+            - [ ] Fix them
           labels: |
             deploy
             staging
