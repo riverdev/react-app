@@ -37,7 +37,6 @@ jobs:
           path: coverage
 
       - name: Send a Slack Message
-        if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
         uses: docker://technosophos/slack-notify
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} # The WEBHOOK is already config to channel z_general
