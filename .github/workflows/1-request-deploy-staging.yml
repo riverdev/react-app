@@ -35,11 +35,11 @@ jobs:
       #  env:
       #    CI: true
 
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v1
-        with:
-          name: code-coverage
-          path: coverage
+      #- name: Upload Test Coverage
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: code-coverage
+      #    path: coverage
 
       - name: Send a Slack Message
         uses: docker://technosophos/slack-notify
@@ -48,7 +48,7 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
 
-          SLACK_MESSAGE: ${{ steps.getdate.outputs.today }} Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
+          SLACK_MESSAGE: ${{ steps.getdate.outputs.today }} tag_name ${{ github.event.release.tag_name }} Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
           #SLACK_CHANNEL: "z_general"
 
       - name: Create an issue
