@@ -1,4 +1,4 @@
-name: Deploy To Staging Server
+name: DeployStaging
 on:
   push:
     branches: [develop]
@@ -16,17 +16,17 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Use NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
-
       - name: Cache dependencies node_modules
         uses: actions/cache@v1
         with:
           path: ~/.npm #${{ steps.npm-cache-dir.outputs.dir }}
           key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-nodecachekey-
+
+      - name: Use NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
 
       - run: npm ci
 

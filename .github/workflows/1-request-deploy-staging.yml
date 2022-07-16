@@ -15,11 +15,6 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Use NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
-
       - name: Cache dependencies node_modules
         uses: actions/cache@v1
         with:
@@ -27,7 +22,12 @@ jobs:
           key: ${{ runner.os }}-nodecachekey-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-nodecachekey-
 
-      - run: npm ci
+      - name: Use NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - run: npm ci # installing dependencies
 
       - run: npm run format:check
 
