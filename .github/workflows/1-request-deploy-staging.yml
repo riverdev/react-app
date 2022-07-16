@@ -31,15 +31,15 @@ jobs:
 
       - run: npm run format:check
 
-      - run: npm run test -- --coverage
-        env:
-          CI: true
+      #- run: npm run test -- --coverage
+      #  env:
+      #    CI: true
 
-      - name: Upload Test Coverage
-        uses: actions/upload-artifact@v1
-        with:
-          name: code-coverage
-          path: coverage
+      #- name: Upload Test Coverage
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: code-coverage
+      #    path: coverage
 
       - name: Send a Slack Message
         uses: docker://technosophos/slack-notify
@@ -48,14 +48,15 @@ jobs:
           #SLACK_MESSAGE: 'Deployed to Production'
           #SLACK_MESSAGE: 'New Release ${{ github.event.release.tag_name }} is published, < ${{ github.event.release.html_url }}|check it out now.>'
 
-          SLACK_MESSAGE: ${{ steps.getdate.outputs.today }} " :" Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
+          SLACK_MESSAGE: ${{ steps.getdate.outputs.today }} tag_name ${{ github.event.release.tag_name }} Pull request for deployment to Staging Server has passed all CI tests and now pending merge...
           #SLACK_CHANNEL: "z_general"
 
       - name: Create an issue
+        if: failure() && github.event_name == 'pull_request'
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: ${{ steps.getdate.outputs.today }} Merge to develop
+          title: ${{ steps.getdate.outputs.today }} Failed tests in pull request to merge to deploy.
           body: |
             ## Waiting for workflow to develop branch merge approval
 
