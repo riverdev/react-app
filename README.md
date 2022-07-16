@@ -1,4 +1,4 @@
-![](https://github.com/riverdev/react-app/workflows/Test%20Request/badge.svg?branch=develop&event=push)
+![](https://github.com/riverdev/react-app/workflows/TestRequest/badge.svg?branch=develop&event=push)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
