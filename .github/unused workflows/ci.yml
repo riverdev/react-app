@@ -95,7 +95,7 @@ jobs:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
 
       - name: Get today's date
-        id: date
+        id: getdate
         run: |
           echo "::set-output name=today::$(date "+%Y/%m/%d")"
 
@@ -103,7 +103,7 @@ jobs:
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: ${{ steps.date.outputs.today }}
+          title: ${{ steps.getdate.outputs.today }}
           body: |
             ## This week's TODO
 
