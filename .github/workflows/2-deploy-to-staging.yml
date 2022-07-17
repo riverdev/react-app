@@ -14,7 +14,7 @@ jobs:
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
-          title: Hello-2-deploy-staging-18-17 # ${{ steps.getdate.outputs.today }} Failed wokflow deploying to staging server
+          title: Hello-2-deploy-staging--18-17 # ${{ steps.getdate.outputs.today }} Failed wokflow deploying to staging server
           body: |
             ## Deployed to Staging Server
 
