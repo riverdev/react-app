@@ -9,6 +9,21 @@ jobs:
     #if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
+      - name: Create deploy issue
+        #if: failure() && github.event_name == 'push'
+        uses: actions-ecosystem/action-create-issue@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          title: Hello-2-deploy-staging-18-17 # ${{ steps.getdate.outputs.today }} Failed wokflow deploying to staging server
+          body: |
+            ## Deployed to Staging Server
+
+            - [ ] Find the errors
+            - [ ] Fix them
+          labels: |
+            deploy
+            staging
+
       - name: Get today's date
         id: getdate
         run: |
