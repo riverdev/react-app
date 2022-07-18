@@ -62,13 +62,13 @@ jobs:
       - name: Build Project
         #if: github.event_name == 'push'
         ##-------------------------------------------
-        if: failure()
+        #if: failure()
         run: npm run build
 
       - name: Upload Build Folder Artifact
         #if: github.event_name == 'push'
         ##-------------------------------------------
-        if: failure()
+        #if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: build
@@ -76,7 +76,7 @@ jobs:
 
       - name: Deploy to Staging
         ##-------------------------------------------
-        if: failure()
+        #if: failure()
         #if: github.event_name == 'push' # This branch will always be develop because of header "on" values //////  && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain dashing-scale.surge.sh
         env:
