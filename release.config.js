@@ -2,7 +2,7 @@
 const { buildQueries } = require('@testing-library/react');
 
 module.exports = {
-  branches: 'main',
+  branches: 'develop',
   repositoryUrl: 'https://github.com/riverdev/react-app',
   plugins: [
     '@semantic-release/commit-analyzer',
