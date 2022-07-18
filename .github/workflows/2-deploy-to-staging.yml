@@ -72,6 +72,7 @@ jobs:
           path: build
 
       - name: Deploy to Staging
+        if: failure()
         #if: github.event_name == 'push' # This branch will always be develop because of header "on" values //////  && github.ref == 'refs/heads/develop'
         run: npx surge --project ./build --domain dashing-scale.surge.sh
         env:
