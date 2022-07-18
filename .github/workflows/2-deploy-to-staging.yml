@@ -6,10 +6,6 @@ on:
 jobs:
   deploy_to_staging:
     name: Deploy To Staging Server
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-      issues: 'write'
 
     #if: github.event_name == 'push'
     runs-on: ubuntu-latest
