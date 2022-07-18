@@ -9,6 +9,7 @@ jobs:
     #if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
+      # This next step is just for testing, can delete it
       - name: Create deploy issue
         #if: failure() && github.event_name == 'push'
         uses: actions-ecosystem/action-create-issue@v1
@@ -59,10 +60,12 @@ jobs:
 
       - name: Build Project
         #if: github.event_name == 'push'
+        if: failure()
         run: npm run build
 
       - name: Upload Build Folder Artifact
         #if: github.event_name == 'push'
+        if: failure()
         uses: actions/upload-artifact@v2
         with:
           name: build
@@ -100,3 +103,9 @@ jobs:
           labels: |
             deploy
             staging
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
